@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  front-end:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    image: softy-pinko-front-end:task6
+    networks:
+      - softy-pinko-network
+
+  back-end-1:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    image: softy-pinko-back-end:task6
+    networks:
+      - softy-pinko-network
+
+  back-end-2:
+    build:
+      context: ./back-end
+      dockerfile: Dockerfile
+    image: softy-pinko-back-end:task6
+    networks:
+      - softy-pinko-network
+
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    image: softy-pinko-proxy:task6
+    ports:
+      - "80:80"
+    depends_on:
+      - back-end-1
+      - back-end-2
+      - front-end
+    networks:
+      - softy-pinko-network
+
+networks:
+  softy-pinko-network:
+    driver: bridge
